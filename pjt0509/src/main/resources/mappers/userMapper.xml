@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.testdemo.model.dao.UserDao">
+	<insert id="joinUser" parameterType="User">
+		insert into user(id, password, type, nth, floor, campus, dept, name) values (#{id}, #{password}, false, #{nth}, #{floor}, #{campus}, #{dept}, #{name}) 
+	</insert>
+	
+	<insert id="joinAdmin" parameterType="User">
+		insert into user(id, password, type, name, campus) values (#{id}, #{password}, true, #{name}, #{campus})
+		
+	</insert>
+	<!-- 여기부터 채우면서 시작 / 로그인 메서드 작성하기--> 
+	
+	<select id="valID" parameterType="String" resultType="int">
+		select count(*) from user where id = #{id}
+	</select>
+	
+	<select id="login" parameterType="java.util.HashMap" resultType="int">
+		select count(*) from user where id=#{id} and password=#{password}
+	</select>
+	
+	<select id="getInfo" parameterType="String" resultType="User">
+		select id, type, nth, dept, name, floor, campus from user where id=#{id}
+			
+	</select>
+</mapper>

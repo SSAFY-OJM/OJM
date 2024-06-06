@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.testdemo.model.dao.CommentDao">
+	<insert id="writeComment" parameterType="Comment">
+		insert into `comment`(user_id, menu, content, rate, `date`) values(#{userId}, #{menu}, #{content}, #{rate}, now());
+	</insert>
+	
+	<select id="getAllComments" resultType="CommentResult">
+		select c.id, m.date as 'menudate', m.type, m.content as 'menu', c.content as 'comment', c.rate, c.date as 'commentdate'
+		from comment c, menu m
+		where c.menu = m.id;
+	</select>
+	
+	<select id="getComments" parameterType="String">
+		select c.id, m.date as 'menudate', m.type, m.content as 'menu', c.content as 'comment', c.rate, c.date as 'commentdate'
+		from comment c, menu m
+		where c.menu = m.id and c.user_id=#{id};
+	</select>
+	
+	<select id="alreadyExists" parameterType="java.util.HashMap" resultType="int">
+		select count(*)
+		from comment c, menu m
+		where m.id = c.menu and m.date=(select date from menu where id=#{menuId}) and c.user_id=#{userId};
+	</select>
+</mapper>

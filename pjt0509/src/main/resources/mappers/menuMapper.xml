@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjt.testdemo.model.dao.MenuDao">
+	<select id="weeklyMenu" resultType="Menu">
+		select * from menu where week(date) = week(now()) order by date, type;
+	</select>
+	
+	<insert id="addMenus" parameterType="Menu">
+		insert into menu(type, content, status, date) values(#{type}, #{content}, 0, #{date})
+	</insert>
+	
+	<update id="setSoldout" parameterType="java.util.HashMap">
+		update menu set `status`=#{status} where id=#{id}
+	</update>
+	
+	<select id="getSoldout" resultType="int">
+		select type from menu where date = date(now()) and status=1
+	</select> 
+	
+	<select id="todayMenu" resultType="Menu">
+		select * from menu where date = date(now()) order by date, type
+	</select>
+	
+	<select id="getBoard" parameterType="int">
+		select * from menu where date between (select startdate from board where id=#{id}) and (select enddate from board where id=#{id})
+		order by date, type;
+	</select>
+	
+	<!-- 파라메터 출력 --> 
+	<update id="test">
+		update menu set content="lala" where date = date(now())
+	</update>
+	
+</mapper>
